@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#4f46e5" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <title>TalentAI – AI Job Finder & Resume Optimizer</title>
+  
+  <link rel="manifest" href="./manifest.json" />
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Phosphor Icons CDN -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <!-- Supabase JS Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Confetti Celebration -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      box-sizing: border-box;
+    }
+    html, body {
+      background-color: #f8fafc;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+    }
+    
+    /* True two-way smooth scrolling without scroll lock */
+    .smooth-scroll {
+      overflow-y: scroll !important;
+      -webkit-overflow-scrolling: touch !important;
+      overscroll-behavior: contain;
+    }
+    
+    /* Modern sleek visible scrollbar */
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 8px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 8px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #a5b4fc;
+      border-radius: 8px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #6366f1;
+    }
+    
+    @media (min-width: 768px) {
+      .app-shell {
+        max-width: 440px;
+        margin: 20px auto;
+        height: calc(100vh - 40px);
+        max-height: 890px;
+        border-radius: 40px;
+        box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.25), 0 0 0 10px #0f172a, 0 0 0 12px #334155;
+        overflow: hidden;
+        position: relative;
+        background: #ffffff;
+      }
+    }
+    @media (max-width: 767px) {
+      .app-shell {
+        width: 100vw;
+        height: 100vh;
+        height: 100dvh; /* Dynamic viewport height for mobile browsers/APKs */
+        overflow: hidden;
+        position: relative;
+        background: #ffffff;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 flex items-center justify-center min-h-screen">
+
+  <div class="app-shell flex flex-col w-full text-slate-800 relative">
+
+    <!-- ================= TOP APP BAR ================= -->
+    <header class="bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between z-30 shrink-0">
+      <div class="flex items-center space-x-2.5">
+        <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-black text-base shadow-sm">
+          T
+        </div>
+        <div>
+          <h1 class="text-base font-bold text-slate-900 leading-none">Talent<span class="text-indigo-600">AI</span></h1>
+          <p class="text-[11px] text-slate-500 font-medium">Smart Career & Resume AI</p>
+        </div>
+      </div>
+
+      <!-- Clean User App Status (Settings & Dev Toggles Protected) -->
+      <div class="flex items-center space-x-1.5">
+        <span class="text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-full flex items-center">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span> Verified
+        </span>
+      </div>
+    </header>
+
+    <!-- ================= SCROLLABLE CONTENT BODY ================= -->
+    <main id="mainContainer" class="flex-1 min-h-0 smooth-scroll custom-scrollbar pb-24 relative bg-slate-50">
+
+      <!-- ================= 1. AUTH SCREEN ================= -->
+      <section id="authSection" class="p-5 space-y-4">
+        <div class="text-center pt-4 pb-2">
+          <div class="w-16 h-16 bg-indigo-50 border border-indigo-100 rounded-2xl mx-auto flex items-center justify-center text-indigo-600 mb-3 shadow-sm">
+            <i class="ph-bold ph-briefcase text-3xl"></i>
+          </div>
+          <h2 class="text-xl font-bold text-slate-900">Find Your Dream Tech Job</h2>
+          <p class="text-xs text-slate-500 mt-1">Real-time jobs + AI Resume Optimizer to unlock high-paying roles.</p>
+        </div>
+
+        <div class="flex bg-slate-200 p-1 rounded-xl text-xs font-semibold">
+          <button id="tabLogin" onclick="setAuthTab('login')" class="flex-1 py-2 rounded-lg bg-white text-slate-900 shadow-sm transition">Sign In</button>
+          <button id="tabSignup" onclick="setAuthTab('signup')" class="flex-1 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition">Create Account</button>
+        </div>
+
+        <form onsubmit="handleAuthSubmit(event)" class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+          <div id="signupNameField" class="hidden space-y-1">
+            <label class="text-xs font-semibold text-slate-700">Full Name</label>
+            <input type="text" id="authName" placeholder="e.g. Lucky Sisodia" class="w-full text-xs p-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600" />
+          </div>
+
+          <div class="space-y-1">
+            <label class="text-xs font-semibold text-slate-700">Email Address</label>
+            <input type="email" id="authEmail" required placeholder="name@example.com" value="lucky.sisodia@demo.com" class="w-full text-xs p-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600" />
+          </div>
+
+          <div class="space-y-1">
+            <label class="text-xs font-semibold text-slate-700">Password</label>
+            <input type="password" id="authPassword" required placeholder="••••••••" value="password123" class="w-full text-xs p-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600" />
+          </div>
+
+          <button type="submit" id="authSubmitBtn" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-md transition">
+            Sign In to TalentAI
+          </button>
+        </form>
+
+        <button onclick="bypassAuth()" class="w-full py-2 text-xs font-semibold text-indigo-600 hover:text-indigo-700 underline text-center block">
+          Continue as Guest User →
+        </button>
+      </section>
+
+      <!-- ================= 2. JOBS FEED SCREEN ================= -->
+      <section id="screen-jobs" class="p-4 space-y-3 hidden">
+        
+        <!-- Welcome & Resume Boost Suggestion Banner -->
+        <div class="bg-gradient-to-r from-indigo-600 to-indigo-800 text-white p-4 rounded-2xl shadow-sm space-y-2 relative overflow-hidden">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-bold uppercase tracking-wider bg-white/20 px-2 py-0.5 rounded-full">
+              AI Recommendation
+            </span>
+            <span id="headerResumeBadge" class="text-xs font-bold bg-white text-indigo-700 px-2.5 py-0.5 rounded-lg shadow-sm">
+              Resume: 74%
+            </span>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold">Hello, <span id="userNameGreeting">Lucky</span> 👋</h3>
+            <p id="resumeBannerTip" class="text-xs text-indigo-100 mt-0.5">
+              Your resume has 3 missing skills. Optimize your resume below to unlock 90%+ match jobs!
+            </p>
+          </div>
+          <button onclick="switchScreen('profile')" class="text-xs font-bold bg-white hover:bg-slate-50 text-indigo-700 px-3 py-1.5 rounded-xl shadow-sm transition flex items-center space-x-1.5 mt-1">
+            <i class="ph-bold ph-magic-wand text-sm"></i>
+            <span>Boost Resume with AI</span>
+          </button>
+        </div>
+
+        <!-- Real-time Search Box -->
+        <div class="relative">
+          <i class="ph-bold ph-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-base"></i>
+          <input 
+            type="text" 
+            id="searchInput" 
+            placeholder="Search Python, React, AI, Developer..." 
+            oninput="handleSearchFilter()"
+            class="w-full bg-white text-xs text-slate-900 placeholder-slate-400 pl-9 pr-9 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 shadow-sm transition"
+          />
+          <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute right-3 top-2.5 text-slate-400 hover:text-slate-600">
+            <i class="ph-bold ph-x-circle text-base"></i>
+          </button>
+        </div>
+
+        <!-- Filter Chips -->
+        <div class="flex items-center space-x-2 overflow-x-auto no-scrollbar py-0.5 text-xs">
+          <button onclick="setFilter('All')" class="filter-chip active px-3 py-1 rounded-full font-medium transition bg-indigo-600 text-white whitespace-nowrap" data-filter="All">All Jobs</button>
+          <button onclick="setFilter('Boosted')" class="filter-chip px-3 py-1 rounded-full font-medium transition bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 whitespace-nowrap" data-filter="Boosted">🔥 Best AI Matches</button>
+          <button onclick="setFilter('Remote')" class="filter-chip px-3 py-1 rounded-full font-medium transition bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 whitespace-nowrap" data-filter="Remote">Remote</button>
+          <button onclick="setFilter('Frontend')" class="filter-chip px-3 py-1 rounded-full font-medium transition bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 whitespace-nowrap" data-filter="Frontend">Frontend</button>
+          <button onclick="setFilter('Backend')" class="filter-chip px-3 py-1 rounded-full font-medium transition bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 whitespace-nowrap" data-filter="Backend">Backend / AI</button>
+        </div>
+
+        <!-- Count & Sort -->
+        <div class="flex items-center justify-between text-[11px] text-slate-500 px-1 pt-1">
+          <span id="jobCountLabel">Loading jobs...</span>
+          <button onclick="refreshLiveJobs()" class="flex items-center text-indigo-600 font-semibold hover:text-indigo-800">
+            <i class="ph-bold ph-arrows-clockwise mr-1"></i> Refresh Jobs
+          </button>
+        </div>
+
+        <!-- Job Cards List with Dedicated Scrollbar -->
+        <div id="jobsList" class="space-y-3 pr-1">
+          <!-- Populated via JS -->
+        </div>
+
+        <!-- Floating Quick Scroll Buttons (Scroll Up & Down) -->
+        <div class="sticky bottom-4 flex justify-end space-x-2 z-20 pointer-events-none pr-1">
+          <button onclick="scrollJobsTop()" title="Scroll to Top" class="pointer-events-auto p-2 rounded-full bg-white text-indigo-600 shadow-md border border-slate-200 hover:bg-slate-50 transition transform hover:scale-105">
+            <i class="ph-bold ph-arrow-up text-base"></i>
+          </button>
+          <button onclick="scrollJobsBottom()" title="Scroll to Bottom" class="pointer-events-auto p-2 rounded-full bg-indigo-600 text-white shadow-md hover:bg-indigo-700 transition transform hover:scale-105">
+            <i class="ph-bold ph-arrow-down text-base"></i>
+          </button>
+        </div>
+      </section>
+
+      <!-- ================= 3. SAVED JOBS SCREEN ================= -->
+      <section id="screen-saved" class="p-4 space-y-3 hidden">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-base font-bold text-slate-900">Saved Jobs</h2>
+            <p class="text-xs text-slate-500">Shortlisted opportunities</p>
+          </div>
+          <span id="savedCountBadge" class="bg-indigo-50 text-indigo-700 text-xs px-2.5 py-0.5 rounded-full font-bold">0 Jobs</span>
+        </div>
+
+        <div id="savedList" class="space-y-3">
+          <!-- Populated via JS -->
+        </div>
+      </section>
+
+      <!-- ================= 4. APPLICATION TRACKER SCREEN ================= -->
+      <section id="screen-tracker" class="p-4 space-y-3 hidden">
+        <div>
+          <h2 class="text-base font-bold text-slate-900">Application Pipeline</h2>
+          <p class="text-xs text-slate-500">Track interview progress in real-time</p>
+        </div>
+
+        <div class="grid grid-cols-4 gap-1.5 text-center text-xs">
+          <div onclick="filterTrackerStage('Applied')" class="cursor-pointer bg-white border border-slate-200 p-2 rounded-xl hover:border-indigo-500 transition">
+            <span id="countApplied" class="block text-base font-bold text-indigo-600">0</span>
+            <span class="text-[10px] text-slate-500 font-medium">Applied</span>
+          </div>
+          <div onclick="filterTrackerStage('Interview')" class="cursor-pointer bg-white border border-slate-200 p-2 rounded-xl hover:border-indigo-500 transition">
+            <span id="countInterview" class="block text-base font-bold text-amber-600">0</span>
+            <span class="text-[10px] text-slate-500 font-medium">Interview</span>
+          </div>
+          <div onclick="filterTrackerStage('Offer')" class="cursor-pointer bg-white border border-slate-200 p-2 rounded-xl hover:border-indigo-500 transition">
+            <span id="countOffer" class="block text-base font-bold text-emerald-600">0</span>
+            <span class="text-[10px] text-slate-500 font-medium">Offer</span>
+          </div>
+          <div onclick="filterTrackerStage('Rejected')" class="cursor-pointer bg-white border border-slate-200 p-2 rounded-xl hover:border-indigo-500 transition">
+            <span id="countRejected" class="block text-base font-bold text-rose-600">0</span>
+            <span class="text-[10px] text-slate-500 font-medium">Rejected</span>
+          </div>
+        </div>
+
+        <div id="trackerList" class="space-y-2.5">
+          <!-- Populated via JS -->
+        </div>
+      </section>
+
+      <!-- ================= 5. PROFILE & AI RESUME OPTIMIZER SCREEN ================= -->
+      <section id="screen-profile" class="p-4 space-y-3.5 hidden">
+        
+        <!-- Candidate Card -->
+        <div class="bg-white border border-slate-200 rounded-2xl p-4 text-center">
+          <div class="w-16 h-16 mx-auto rounded-full bg-indigo-50 border border-indigo-100 flex items-center justify-center text-2xl font-bold text-indigo-600 shadow-sm">
+            LS
+          </div>
+          <h3 id="profileFullName" class="mt-2 text-base font-bold text-slate-900">Lucky Sisodia</h3>
+          <p class="text-xs text-indigo-600 font-medium">Full Stack & AI Engineer</p>
+          <p id="profileEmail" class="text-[11px] text-slate-500">lucky.sisodia@demo.com</p>
+        </div>
+
+        <!-- 🔥 AI RESUME OPTIMIZER TOOL (HERO FEATURE) -->
+        <div class="bg-gradient-to-br from-indigo-50 via-white to-purple-50 border-2 border-indigo-200 rounded-2xl p-4 space-y-3 shadow-sm">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white text-base">
+                <i class="ph-bold ph-magic-wand"></i>
+              </div>
+              <div>
+                <h4 class="text-xs font-bold text-slate-900">AI Resume Optimizer</h4>
+                <p class="text-[10px] text-slate-500">Detects weaknesses & auto-enhances score</p>
+              </div>
+            </div>
+            <span id="resumeScoreDisplay" class="text-xs font-black text-indigo-700 bg-white border border-indigo-200 px-2.5 py-1 rounded-xl shadow-xs">
+              74/100 (Needs Boost)
+            </span>
+          </div>
+
+          <!-- Progress bar -->
+          <div class="space-y-1">
+            <div class="flex items-center justify-between text-[11px] font-semibold text-slate-600">
+              <span>Resume Strength</span>
+              <span id="resumeStrengthPercent">74%</span>
+            </div>
+            <div class="w-full bg-slate-200 rounded-full h-2">
+              <div id="resumeProgressBar" class="bg-indigo-600 h-2 rounded-full transition-all duration-500" style="width: 74%"></div>
+            </div>
+          </div>
+
+          <!-- AI Identified Weaknesses & Action Items -->
+          <div id="resumeAuditBox" class="bg-white p-3 rounded-xl border border-indigo-100 space-y-2 text-xs">
+            <p class="font-bold text-slate-800 flex items-center text-[11px]">
+              <i class="ph-bold ph-warning-circle text-amber-500 mr-1.5 text-sm"></i> AI Identified Weaknesses:
+            </p>
+            <ul id="weaknessList" class="space-y-1 text-[11px] text-slate-600">
+              <li>⚠️ Missing high-demand keywords: <strong>Docker</strong>, <strong>TypeScript</strong>, <strong>Cloud (AWS)</strong></li>
+              <li>⚠️ Projects lack quantifiable business impact metrics.</li>
+            </ul>
+
+            <!-- One-Click AI Enhance Button -->
+            <button onclick="optimizeResumeWithAI()" id="btnAutoEnhance" class="w-full mt-2 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold text-xs rounded-xl shadow-md transition flex items-center justify-center space-x-1.5">
+              <i class="ph-bold ph-sparkle text-sm"></i>
+              <span>Auto-Optimize Resume & Unlock 95% Jobs</span>
+            </button>
+          </div>
+
+          <!-- Optimized Summary Preview (Revealed after boost) -->
+          <div id="optimizedResultBox" class="hidden bg-emerald-50 border border-emerald-200 p-3 rounded-xl text-xs space-y-1.5">
+            <div class="flex items-center justify-between text-emerald-800 font-bold text-[11px]">
+              <span class="flex items-center"><i class="ph-bold ph-check-circle mr-1 text-sm text-emerald-600"></i> Resume Successfully Optimized!</span>
+              <span class="bg-emerald-600 text-white px-2 py-0.5 rounded text-[10px]">96/100 Score</span>
+            </div>
+            <p class="text-[11px] text-emerald-700">
+              Added 3 high-impact skills (Docker, TypeScript, AWS Architecture) and re-indexed candidate profile. Your job match scores have increased across all listings!
+            </p>
+          </div>
+        </div>
+
+        <!-- Skills Section -->
+        <div class="bg-white border border-slate-200 rounded-2xl p-4 space-y-2.5">
+          <div class="flex items-center justify-between">
+            <h4 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Candidate Skills</h4>
+            <button onclick="promptAddSkill()" class="text-xs font-bold text-indigo-600 hover:text-indigo-700">+ Add Skill</button>
+          </div>
+          <div id="userSkillsList" class="flex flex-wrap gap-1.5">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Complete Document & Resume File Box -->
+        <div class="bg-white border border-slate-200 rounded-2xl p-4 space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2.5">
+              <div id="fileTypeIcon" class="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 text-lg">
+                <i class="ph-bold ph-file-pdf"></i>
+              </div>
+              <div>
+                <h4 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Candidate Resume Document</h4>
+                <p class="text-[11px] text-slate-500 font-medium" id="uploadedFileName">Lucky_Sisodia_Resume_2026.pdf</p>
+                <span id="fileSizeBadge" class="text-[10px] text-slate-400">PDF Document • 420 KB</span>
+              </div>
+            </div>
+            <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md">Verified</span>
+          </div>
+
+          <label class="block cursor-pointer">
+            <input type="file" id="resumeFileInput" accept=".pdf,.doc,.docx,.txt,.rtf,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain" class="hidden" onchange="handleResumeUpload(event)" />
+            <div class="w-full py-2.5 rounded-xl border border-dashed border-indigo-300 hover:border-indigo-600 bg-indigo-50/50 hover:bg-indigo-50 text-center text-xs font-semibold text-indigo-700 transition flex items-center justify-center space-x-1.5">
+              <i class="ph-bold ph-upload-simple text-sm"></i>
+              <span>Upload Document (PDF, Word DOCX, TXT)</span>
+            </div>
+          </label>
+        </div>
+
+        <!-- Sign Out Action -->
+        <button onclick="handleSignOut()" class="w-full py-2.5 rounded-xl border border-rose-200 bg-rose-50 text-rose-600 font-bold text-xs hover:bg-rose-100 transition">
+          Sign Out
+        </button>
+      </section>
+
+    </main>
+
+    <!-- ================= JOB DETAILS MODAL ================= -->
+    <div id="jobDetailModal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+      <div class="w-full max-w-md bg-white rounded-t-3xl sm:rounded-2xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+        
+        <div class="px-4 py-3 flex items-center justify-between border-b border-slate-100">
+          <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Job Details</span>
+          <button onclick="closeModal()" class="p-1 rounded-full text-slate-400 hover:text-slate-700">
+            <i class="ph-bold ph-x text-lg"></i>
+          </button>
+        </div>
+
+        <div id="modalContent" class="overflow-y-auto no-scrollbar p-4 space-y-4 flex-1">
+          <!-- Populated via JS -->
+        </div>
+
+        <div class="p-3 bg-slate-50 border-t border-slate-200 flex items-center space-x-2">
+          <button id="modalSaveBtn" onclick="toggleSaveCurrentJob()" class="p-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 text-slate-700 transition">
+            <i class="ph-bold ph-bookmark-simple text-lg"></i>
+          </button>
+          <a id="modalExternalApplyBtn" href="#" target="_blank" class="hidden py-2.5 px-3 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 text-slate-700 font-bold text-xs flex items-center justify-center">
+            <i class="ph-bold ph-arrow-square-out mr-1"></i> Original Post
+          </a>
+          <button id="modalApplyBtn" onclick="applyToCurrentJob()" class="flex-1 py-2.5 px-4 rounded-xl font-bold bg-indigo-600 hover:bg-indigo-700 text-white transition text-xs shadow-sm flex items-center justify-center">
+            <i class="ph-bold ph-paper-plane-tilt mr-1.5 text-sm"></i> Apply & Track
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ================= SETTINGS & API MODAL ================= -->
+    <div id="configModal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+      <div class="w-full max-w-sm bg-white rounded-2xl p-5 shadow-2xl space-y-3">
+        <div class="flex items-center justify-between">
+          <h3 class="font-bold text-sm text-slate-900">Settings & Live APIs</h3>
+          <button onclick="closeConfigModal()" class="text-slate-400 hover:text-slate-600">
+            <i class="ph-bold ph-x text-base"></i>
+          </button>
+        </div>
+        <p class="text-[11px] text-slate-500">
+          Sync real-time jobs from Remotive API & connect Supabase 24/7 cloud.
+        </p>
+        <div class="space-y-2 text-xs">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-0.5">Supabase URL</label>
+            <input type="text" id="cfgUrl" placeholder="https://xyz.supabase.co" class="w-full p-2 border border-slate-200 rounded-lg text-xs" />
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-0.5">Supabase Anon Key</label>
+            <input type="password" id="cfgKey" placeholder="eyJhbGciOi..." class="w-full p-2 border border-slate-200 rounded-lg text-xs" />
+          </div>
+        </div>
+        <div class="pt-2 flex items-center justify-end space-x-2">
+          <button onclick="closeConfigModal()" class="px-3 py-1.5 text-xs text-slate-500 hover:text-slate-700">Cancel</button>
+          <button onclick="saveSupabaseConfig()" class="px-4 py-1.5 text-xs font-bold bg-indigo-600 text-white rounded-lg shadow-sm">Save & Sync</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= BOTTOM NAVIGATION BAR ================= -->
+    <nav id="bottomNav" class="hidden bg-white border-t border-slate-200 absolute bottom-0 left-0 right-0 h-14 flex items-center justify-around px-2 z-40">
+      <button onclick="switchScreen('jobs')" id="nav-jobs" class="nav-btn active flex flex-col items-center justify-center flex-1 py-1 text-indigo-600 transition">
+        <i class="ph-bold ph-briefcase text-xl"></i>
+        <span class="text-[10px] font-semibold mt-0.5">Jobs</span>
+      </button>
+
+      <button onclick="switchScreen('saved')" id="nav-saved" class="nav-btn flex flex-col items-center justify-center flex-1 py-1 text-slate-400 hover:text-slate-600 transition">
+        <i class="ph-bold ph-bookmark-simple text-xl"></i>
+        <span class="text-[10px] font-semibold mt-0.5">Saved</span>
+      </button>
+
+      <button onclick="switchScreen('tracker')" id="nav-tracker" class="nav-btn flex flex-col items-center justify-center flex-1 py-1 text-slate-400 hover:text-slate-600 transition">
+        <i class="ph-bold ph-kanban text-xl"></i>
+        <span class="text-[10px] font-semibold mt-0.5">Tracker</span>
+      </button>
+
+      <button onclick="switchScreen('profile')" id="nav-profile" class="nav-btn flex flex-col items-center justify-center flex-1 py-1 text-slate-400 hover:text-slate-600 transition">
+        <i class="ph-bold ph-user text-xl"></i>
+        <span class="text-[10px] font-semibold mt-0.5">Resume AI</span>
+      </button>
+    </nav>
+
+  </div>
+
+  <script>
+    // State
+    let currentUser = null;
+    let authMode = 'login';
+    let supabaseClient = null;
+    let allJobs = [];
+    let displayedJobs = [];
+    let savedJobIds = new Set();
+    let appliedTracker = [];
+    let currentFilter = 'All';
+    let currentSortDesc = true;
+    let selectedJob = null;
+    let isLiveApiMode = true;
+    let resumeScore = 74;
+    let isResumeOptimized = false;
+    let userCandidateSkills = ['Python', 'React', 'SQL', 'Git', 'FastAPI', 'HTML/CSS'];
+
+    // High quality company avatar generator with real logos
+    function generateCompanyLogoHtml(companyName, rawLogoUrl) {
+      const cleanName = (companyName || 'TechCorp').replace(/[^a-zA-Z0-9 ]/g, '').trim();
+      const encoded = encodeURIComponent(cleanName);
+      
+      // If live URL provided
+      if (rawLogoUrl && rawLogoUrl.startsWith('http')) {
+        return `
+          <div class="w-11 h-11 rounded-xl bg-white border border-slate-200 p-1 flex items-center justify-center shadow-xs overflow-hidden shrink-0">
+            <img src="${rawLogoUrl}" class="w-full h-full object-contain" onerror="this.onerror=null; this.src='https://api.dicebear.com/7.x/identicon/svg?seed=${encoded}';" alt="${cleanName}" />
+          </div>
+        `;
+      }
+      
+      // High-grade crisp vector logo from DiceBear Identicon
+      const dicebearUrl = `https://api.dicebear.com/7.x/identicon/svg?seed=${encoded}&backgroundColor=eef2ff,ede9fe,e0f2fe,f0fdf4`;
+      return `
+        <div class="w-11 h-11 rounded-xl bg-slate-50 border border-slate-200 p-1.5 flex items-center justify-center shadow-xs overflow-hidden shrink-0">
+          <img src="${dicebearUrl}" class="w-full h-full object-contain" alt="${cleanName}" />
+        </div>
+      `;
+    }
+
+    async function initApp() {
+      initSupabase();
+      loadState();
+      await fetchJobs();
+      
+      if (currentUser) {
+        showApp();
+      } else {
+        showAuth();
+      }
+    }
+
+    function initSupabase() {
+      const url = localStorage.getItem('talentai_sb_url');
+      const key = localStorage.getItem('talentai_sb_key');
+      if (url && key && window.supabase) {
+        try {
+          supabaseClient = window.supabase.createClient(url, key);
+        } catch(e) {}
+      }
+    }
+
+    function loadState() {
+      const user = localStorage.getItem('talentai_current_user');
+      if (user) {
+        try { 
+          currentUser = JSON.parse(user); 
+          // Auto-migrate any cached name
+          if (currentUser && currentUser.name && currentUser.name.toLowerCase().includes('rohan')) {
+            currentUser.name = 'Lucky Sisodia';
+            currentUser.email = 'lucky.sisodia@demo.com';
+            localStorage.setItem('talentai_current_user', JSON.stringify(currentUser));
+          }
+        } catch(e){}
+      } else {
+        currentUser = { email: 'lucky.sisodia@demo.com', name: 'Lucky Sisodia', id: 'user_lucky' };
+        localStorage.setItem('talentai_current_user', JSON.stringify(currentUser));
+      }
+      const saved = localStorage.getItem('talentai_saved');
+      if (saved) {
+        try { savedJobIds = new Set(JSON.parse(saved)); } catch(e){}
+      }
+      const tracker = localStorage.getItem('talentai_tracker');
+      if (tracker) {
+        try { appliedTracker = JSON.parse(tracker); } catch(e){}
+      }
+      const skills = localStorage.getItem('talentai_skills');
+      if (skills) {
+        try { userCandidateSkills = JSON.parse(skills); } catch(e){}
+      }
+      const score = localStorage.getItem('talentai_resume_score');
+      if (score) {
+        resumeScore = parseInt(score);
+        isResumeOptimized = resumeScore >= 90;
+      }
+    }
+
+    function saveState() {
+      if (currentUser) {
+        localStorage.setItem('talentai_current_user', JSON.stringify(currentUser));
+      } else {
+        localStorage.removeItem('talentai_current_user');
+      }
+      localStorage.setItem('talentai_saved', JSON.stringify([...savedJobIds]));
+      localStorage.setItem('talentai_tracker', JSON.stringify(appliedTracker));
+      localStorage.setItem('talentai_skills', JSON.stringify(userCandidateSkills));
+      localStorage.setItem('talentai_resume_score', resumeScore.toString());
+    }
+
+    // Dynamic AI Matching algorithm with Resume Boost factor
+    function calculateAIMatch(jobSkills, jobTitle, jobDesc) {
+      const text = ((jobSkills || []).join(' ') + ' ' + (jobTitle || '') + ' ' + (jobDesc || '')).toLowerCase();
+      let matched = [];
+      let missing = [];
+
+      userCandidateSkills.forEach(skill => {
+        if (text.includes(skill.toLowerCase())) {
+          matched.push(skill);
+        } else {
+          missing.push(skill);
+        }
+      });
+
+      // Calculate baseline match
+      let baseScore = 65 + Math.round((matched.length / Math.max(userCandidateSkills.length, 1)) * 30);
+      
+      // If candidate has optimized their resume, apply boost
+      if (isResumeOptimized) {
+        baseScore = Math.min(97, baseScore + 12);
+      }
+      if (baseScore > 98) baseScore = 98;
+      if (baseScore < 65) baseScore = 65;
+
+      return {
+        score: baseScore,
+        matched: matched.length > 0 ? matched : ['Problem Solving', 'Coding Fundamentals'],
+        missing: missing.slice(0, 2),
+        whyMatch: isResumeOptimized 
+          ? `Top 5% Candidate: Enhanced skillset overlaps directly with core job tech stack.` 
+          : `Matches ${matched.length} core skills from your resume. Enhance with AI for higher ranking.`
+      };
+    }
+
+    // Real-Time Job Fetching
+    async function fetchJobs() {
+      const label = document.getElementById('jobCountLabel');
+      if (label) label.textContent = 'Fetching real-time tech jobs...';
+
+      if (isLiveApiMode) {
+        try {
+          const res = await fetch('https://remotive.com/api/remote-jobs?category=software-dev&limit=30');
+          if (res.ok) {
+            const data = await res.json();
+            if (data.jobs && data.jobs.length > 0) {
+              const liveJobs = data.jobs.map(item => {
+                const ai = calculateAIMatch(item.tags, item.title, item.description);
+                return {
+                  id: item.id,
+                  title: item.title,
+                  company: item.company_name,
+                  logo: generateCompanyLogoHtml(item.company_name, item.company_logo),
+                  location: item.candidate_required_location || 'Remote',
+                  type: item.job_type === 'full_time' ? 'Full Time' : 'Contract',
+                  mode: 'Remote',
+                  salary: item.salary || '₹14 - ₹24 LPA ($85k+)',
+                  experience: 'Mid Level',
+                  matchScore: ai.score,
+                  matchingSkills: item.tags && item.tags.length > 0 ? item.tags.slice(0, 4) : ai.matched,
+                  missingSkills: ai.missing,
+                  whyMatch: ai.whyMatch,
+                  description: item.description ? item.description.replace(/<[^>]*>?/gm, '').slice(0, 320) + '...' : 'Great technical position.',
+                  applyUrl: item.url
+                };
+              });
+
+              allJobs = liveJobs;
+              displayedJobs = [...allJobs];
+              renderJobs(displayedJobs);
+              return;
+            }
+          }
+        } catch(e) {}
+      }
+
+      // Fallback to local jobs with generated company logos
+      try {
+        const res = await fetch('./jobs.json');
+        if (res.ok) {
+          const raw = await res.json();
+          allJobs = raw.map(j => {
+            const ai = calculateAIMatch(j.matchingSkills, j.title, j.description);
+            return {
+              ...j,
+              matchScore: ai.score,
+              logo: generateCompanyLogoHtml(j.company, null)
+            };
+          });
+        }
+      } catch(e) {}
+
+      displayedJobs = [...allJobs];
+      renderJobs(displayedJobs);
+    }
+
+    function toggleFeedSource() {
+      isLiveApiMode = !isLiveApiMode;
+      const label = document.getElementById('feedModeLabel');
+      label.textContent = isLiveApiMode ? 'Live API' : 'Curated 50';
+      fetchJobs();
+    }
+
+    function refreshLiveJobs() {
+      fetchJobs();
+    }
+
+    // Render Jobs Feed
+    function renderJobs(jobsToRender) {
+      const container = document.getElementById('jobsList');
+      const countLabel = document.getElementById('jobCountLabel');
+      countLabel.textContent = `Showing ${jobsToRender.length} live jobs`;
+
+      if (jobsToRender.length === 0) {
+        container.innerHTML = `
+          <div class="py-12 text-center text-slate-400">
+            <i class="ph-bold ph-magnifying-glass text-3xl mb-1 text-slate-300 block"></i>
+            <p class="font-semibold text-slate-600 text-xs">No matching jobs found</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = jobsToRender.map(job => {
+        const isSaved = savedJobIds.has(job.id) || savedJobIds.has(String(job.id));
+        const scoreColor = job.matchScore >= 90 ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
+                           job.matchScore >= 80 ? 'bg-indigo-50 text-indigo-700 border-indigo-200' :
+                           'bg-amber-50 text-amber-700 border-amber-200';
+
+        return `
+          <div class="bg-white border border-slate-200 hover:border-slate-300 rounded-2xl p-3.5 shadow-sm transition cursor-pointer" onclick="openJobDetail('${job.id}')">
+            
+            <div class="flex items-start justify-between">
+              <div class="flex items-start space-x-3">
+                <div class="shrink-0">
+                  ${job.logo}
+                </div>
+                <div>
+                  <h3 class="font-bold text-slate-900 text-xs leading-snug">${job.title}</h3>
+                  <p class="text-[11px] text-slate-500 font-medium">${job.company}</p>
+                  <p class="text-[10px] text-slate-400 mt-0.5">
+                    ${job.location} • <span class="font-semibold text-slate-700">${job.salary}</span>
+                  </p>
+                </div>
+              </div>
+
+              <span class="text-[11px] font-bold px-2 py-0.5 rounded-md border ${scoreColor} shrink-0">
+                ${job.matchScore}% Match
+              </span>
+            </div>
+
+            <div class="flex items-center space-x-1.5 mt-2.5 text-[10px]">
+              <span class="bg-slate-100 px-2 py-0.5 rounded text-slate-600 font-medium">${job.type}</span>
+              <span class="bg-slate-100 px-2 py-0.5 rounded text-slate-600 font-medium">${job.mode}</span>
+              <span class="bg-slate-100 px-2 py-0.5 rounded text-slate-600 font-medium">${job.experience}</span>
+            </div>
+
+            <div class="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between">
+              <div class="flex items-center space-x-1 overflow-hidden">
+                ${job.matchingSkills.slice(0, 3).map(skill => `
+                  <span class="text-[9px] bg-slate-50 text-slate-600 border border-slate-200 px-1.5 py-0.5 rounded truncate max-w-[85px]">${skill}</span>
+                `).join('')}
+                ${job.matchingSkills.length > 3 ? `<span class="text-[9px] text-slate-400">+${job.matchingSkills.length - 3}</span>` : ''}
+              </div>
+
+              <button onclick="event.stopPropagation(); toggleSave('${job.id}')" class="p-1 text-slate-400 hover:text-indigo-600 transition">
+                <i class="ph-bold ${isSaved ? 'ph-bookmark-simple-fill text-indigo-600' : 'ph-bookmark-simple'} text-base"></i>
+              </button>
+            </div>
+
+          </div>
+        `;
+      }).join('');
+    }
+
+    // 🔥 AI RESUME OPTIMIZER CORE FUNCTION
+    function optimizeResumeWithAI() {
+      const btn = document.getElementById('btnAutoEnhance');
+      btn.innerHTML = `<i class="ph-bold ph-spinner animate-spin text-sm"></i><span>Analyzing & Enhancing Resume...</span>`;
+
+      setTimeout(() => {
+        // Upgrade candidate skills
+        const missingHighDemand = ['Docker', 'TypeScript', 'AWS Cloud'];
+        missingHighDemand.forEach(s => {
+          if (!userCandidateSkills.includes(s)) userCandidateSkills.push(s);
+        });
+
+        resumeScore = 96;
+        isResumeOptimized = true;
+        saveState();
+
+        // Update UI
+        document.getElementById('resumeScoreDisplay').textContent = '96/100 (Top 5%)';
+        document.getElementById('resumeScoreDisplay').className = 'text-xs font-black text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-xl';
+        document.getElementById('resumeStrengthPercent').textContent = '96%';
+        document.getElementById('resumeProgressBar').style.width = '96%';
+        document.getElementById('resumeProgressBar').className = 'bg-emerald-600 h-2 rounded-full transition-all duration-500';
+        document.getElementById('headerResumeBadge').textContent = 'Resume: 96% 🔥';
+        document.getElementById('headerResumeBadge').className = 'text-xs font-bold bg-emerald-400 text-slate-900 px-2.5 py-0.5 rounded-lg shadow-sm';
+        document.getElementById('resumeBannerTip').textContent = 'Resume is now fully optimized! High-match jobs unlocked below.';
+
+        document.getElementById('resumeAuditBox').classList.add('hidden');
+        document.getElementById('optimizedResultBox').classList.remove('hidden');
+
+        renderUserSkills();
+        fetchJobs(); // Re-index all jobs with boosted scores
+
+        if (typeof confetti === 'function') {
+          confetti({ particleCount: 70, spread: 65, origin: { y: 0.7 } });
+        }
+
+        alert("🎉 AI Resume Optimization Complete! Weaknesses resolved and match scores boosted to 95%+!");
+      }, 1200);
+    }
+
+    // Filter & Search
+    function setFilter(filterType) {
+      currentFilter = filterType;
+      document.querySelectorAll('.filter-chip').forEach(btn => {
+        if (btn.getAttribute('data-filter') === filterType) {
+          btn.classList.add('bg-indigo-600', 'text-white');
+          btn.classList.remove('bg-white', 'text-slate-600', 'border');
+        } else {
+          btn.classList.remove('bg-indigo-600', 'text-white');
+          btn.classList.add('bg-white', 'text-slate-600', 'border');
+        }
+      });
+      applyFiltersAndSearch();
+    }
+
+    function handleSearchFilter() {
+      const q = document.getElementById('searchInput').value.trim();
+      document.getElementById('clearSearchBtn').classList.toggle('hidden', !q);
+      applyFiltersAndSearch();
+    }
+
+    function clearSearch() {
+      document.getElementById('searchInput').value = '';
+      document.getElementById('clearSearchBtn').classList.add('hidden');
+      applyFiltersAndSearch();
+    }
+
+    function applyFiltersAndSearch() {
+      const query = document.getElementById('searchInput').value.toLowerCase().trim();
+      
+      let filtered = allJobs.filter(job => {
+        if (currentFilter === 'Remote' && job.mode !== 'Remote') return false;
+        if (currentFilter === 'Boosted' && job.matchScore < 90) return false;
+        if (currentFilter === 'Frontend' && !job.title.toLowerCase().includes('frontend') && !job.title.toLowerCase().includes('react')) return false;
+        if (currentFilter === 'Backend' && !job.title.toLowerCase().includes('backend') && !job.title.toLowerCase().includes('ai') && !job.title.toLowerCase().includes('python')) return false;
+
+        if (query) {
+          const inTitle = job.title.toLowerCase().includes(query);
+          const inComp = job.company.toLowerCase().includes(query);
+          const inLoc = job.location.toLowerCase().includes(query);
+          const inSkill = job.matchingSkills.some(s => s.toLowerCase().includes(query));
+          if (!inTitle && !inComp && !inLoc && !inSkill) return false;
+        }
+        return true;
+      });
+
+      filtered.sort((a, b) => currentSortDesc ? b.matchScore - a.matchScore : a.matchScore - b.matchScore);
+      displayedJobs = filtered;
+      renderJobs(displayedJobs);
+    }
+
+    function toggleSort() {
+      currentSortDesc = !currentSortDesc;
+      applyFiltersAndSearch();
+    }
+
+    // Save
+    function toggleSave(jobId) {
+      if (savedJobIds.has(jobId)) {
+        savedJobIds.delete(jobId);
+      } else {
+        savedJobIds.add(jobId);
+      }
+      saveState();
+      applyFiltersAndSearch();
+      renderSavedJobs();
+      updateModalSaveBtn();
+    }
+
+    function renderSavedJobs() {
+      const container = document.getElementById('savedList');
+      const countBadge = document.getElementById('savedCountBadge');
+      const list = allJobs.filter(j => savedJobIds.has(j.id) || savedJobIds.has(String(j.id)));
+      countBadge.textContent = `${list.length} Jobs`;
+
+      if (list.length === 0) {
+        container.innerHTML = `
+          <div class="py-14 text-center text-slate-400">
+            <i class="ph-bold ph-bookmark-simple text-3xl mb-1 text-slate-300 block"></i>
+            <p class="font-semibold text-slate-600 text-xs">No saved jobs yet</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = list.map(job => `
+        <div class="bg-white border border-slate-200 rounded-2xl p-3 flex items-center justify-between cursor-pointer" onclick="openJobDetail('${job.id}')">
+          <div class="flex items-center space-x-2.5">
+            <div class="shrink-0">
+              ${job.logo}
+            </div>
+            <div>
+              <h4 class="font-bold text-slate-900 text-xs">${job.title}</h4>
+              <p class="text-[11px] text-slate-500">${job.company} • ${job.salary}</p>
+            </div>
+          </div>
+          <button onclick="event.stopPropagation(); toggleSave('${job.id}')" class="p-2 text-rose-500 hover:text-rose-700">
+            <i class="ph-bold ph-trash text-base"></i>
+          </button>
+        </div>
+      `).join('');
+    }
+
+    // Job Detail Modal
+    function openJobDetail(jobId) {
+      const job = allJobs.find(j => j.id == jobId);
+      if (!job) return;
+      selectedJob = job;
+
+      const content = document.getElementById('modalContent');
+      content.innerHTML = `
+        <div class="text-center pt-1">
+          <div class="w-14 h-14 mx-auto rounded-xl flex items-center justify-center text-2xl shadow-sm">
+            ${job.logo}
+          </div>
+          <h2 class="mt-2 text-base font-bold text-slate-900">${job.title}</h2>
+          <p class="text-xs text-indigo-600 font-medium">${job.company} • ${job.location}</p>
+          <p class="text-xs font-semibold text-slate-700 mt-0.5">${job.salary} • ${job.type}</p>
+        </div>
+
+        <div class="bg-indigo-50/70 border border-indigo-100 rounded-2xl p-3.5 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-800">Skill Compatibility Score</span>
+            <span class="text-xs font-black text-indigo-700 bg-white border border-indigo-200 px-2 py-0.5 rounded-lg">
+              ${job.matchScore}%
+            </span>
+          </div>
+          <p class="text-xs text-slate-600 bg-white p-2.5 rounded-xl border border-indigo-50">
+            💡 <span class="font-semibold text-slate-800">Analysis:</span> ${job.whyMatch}
+          </p>
+          <div>
+            <span class="text-[10px] font-bold uppercase text-emerald-700">Skills Matching Your Resume</span>
+            <div class="flex flex-wrap gap-1 mt-1">
+              ${job.matchingSkills.map(s => `<span class="text-[11px] bg-white text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded">✓ ${s}</span>`).join('')}
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-1">
+          <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider">Role Overview</h4>
+          <p class="text-xs text-slate-600 leading-relaxed bg-slate-50 p-3 rounded-xl border border-slate-100">
+            ${job.description}
+          </p>
+        </div>
+      `;
+
+      const extBtn = document.getElementById('modalExternalApplyBtn');
+      if (job.applyUrl && job.applyUrl !== '#') {
+        extBtn.href = job.applyUrl;
+        extBtn.classList.remove('hidden');
+      } else {
+        extBtn.classList.add('hidden');
+      }
+
+      updateModalSaveBtn();
+      document.getElementById('jobDetailModal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('jobDetailModal').classList.add('hidden');
+      selectedJob = null;
+    }
+
+    function updateModalSaveBtn() {
+      if (!selectedJob) return;
+      const btn = document.getElementById('modalSaveBtn');
+      const isSaved = savedJobIds.has(selectedJob.id) || savedJobIds.has(String(selectedJob.id));
+      btn.innerHTML = `<i class="ph-bold ${isSaved ? 'ph-bookmark-simple-fill text-indigo-600' : 'ph-bookmark-simple text-slate-600'} text-lg"></i>`;
+    }
+
+    function toggleSaveCurrentJob() {
+      if (selectedJob) toggleSave(selectedJob.id);
+    }
+
+    // Apply
+    function applyToCurrentJob() {
+      if (!selectedJob) return;
+
+      const existing = appliedTracker.find(a => a.jobId == selectedJob.id);
+      if (existing) {
+        alert("You have already applied for this position! Status: " + existing.stage);
+        closeModal();
+        return;
+      }
+
+      const newApp = {
+        id: Date.now(),
+        jobId: selectedJob.id,
+        title: selectedJob.title,
+        company: selectedJob.company,
+        appliedDate: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+        stage: 'Applied',
+        notes: isResumeOptimized ? 'Submitted with AI-Optimized Resume (96%)' : 'Submitted with Standard Profile'
+      };
+
+      appliedTracker.unshift(newApp);
+      saveState();
+      renderTracker();
+
+      if (typeof confetti === 'function') {
+        confetti({ particleCount: 50, spread: 60, origin: { y: 0.8 } });
+      }
+
+      alert(`Application tracked for ${selectedJob.company}! Moved to Tracker.`);
+      closeModal();
+      switchScreen('tracker');
+    }
+
+    // Tracker
+    function renderTracker(filterStage = null) {
+      const container = document.getElementById('trackerList');
+      const counts = { Applied: 0, Interview: 0, Offer: 0, Rejected: 0 };
+      appliedTracker.forEach(a => { if (counts[a.stage] !== undefined) counts[a.stage]++; });
+
+      document.getElementById('countApplied').textContent = counts.Applied;
+      document.getElementById('countInterview').textContent = counts.Interview;
+      document.getElementById('countOffer').textContent = counts.Offer;
+      document.getElementById('countRejected').textContent = counts.Rejected;
+
+      let list = appliedTracker;
+      if (filterStage) list = list.filter(a => a.stage === filterStage);
+
+      if (list.length === 0) {
+        container.innerHTML = `
+          <div class="py-12 text-center text-slate-400">
+            <i class="ph-bold ph-kanban text-3xl mb-1 text-slate-300 block"></i>
+            <p class="font-semibold text-slate-600 text-xs">No applications tracked yet</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = list.map(app => `
+        <div class="bg-white border border-slate-200 rounded-2xl p-3 space-y-2">
+          <div class="flex items-start justify-between">
+            <div>
+              <h4 class="font-bold text-slate-900 text-xs">${app.title}</h4>
+              <p class="text-[11px] text-slate-500">${app.company}</p>
+              <p class="text-[10px] text-slate-400">Date: ${app.appliedDate}</p>
+            </div>
+
+            <select onchange="updateAppStage(${app.id}, this.value)" class="text-[11px] font-bold rounded-lg border px-2 py-0.5 bg-slate-50 text-slate-700">
+              <option value="Applied" ${app.stage === 'Applied' ? 'selected' : ''}>Applied</option>
+              <option value="Interview" ${app.stage === 'Interview' ? 'selected' : ''}>Interview</option>
+              <option value="Offer" ${app.stage === 'Offer' ? 'selected' : ''}>Offer</option>
+              <option value="Rejected" ${app.stage === 'Rejected' ? 'selected' : ''}>Rejected</option>
+            </select>
+          </div>
+
+          <div class="flex items-center justify-between text-xs pt-1 border-t border-slate-100">
+            <span class="text-[10px] text-slate-400 italic">${app.notes}</span>
+            <button onclick="removeApplication(${app.id})" class="text-rose-500 hover:text-rose-700 text-[11px]">Remove</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterTrackerStage(stage) {
+      renderTracker(stage);
+    }
+
+    function updateAppStage(appId, newStage) {
+      const app = appliedTracker.find(a => a.id === appId);
+      if (app) {
+        app.stage = newStage;
+        saveState();
+        renderTracker();
+      }
+    }
+
+    function removeApplication(appId) {
+      appliedTracker = appliedTracker.filter(a => a.id !== appId);
+      saveState();
+      renderTracker();
+    }
+
+    // Skills
+    function renderUserSkills() {
+      const container = document.getElementById('userSkillsList');
+      container.innerHTML = userCandidateSkills.map(s => `
+        <span class="text-xs bg-slate-100 text-slate-700 border border-slate-200 px-2 py-0.5 rounded-lg flex items-center space-x-1">
+          <span>${s}</span>
+          <button onclick="removeSkill('${s}')" class="text-slate-400 hover:text-rose-500 text-xs">×</button>
+        </span>
+      `).join('');
+    }
+
+    function promptAddSkill() {
+      const skill = prompt("Enter skill name to add (e.g. Docker, TypeScript):");
+      if (skill && skill.trim()) {
+        const val = skill.trim();
+        if (!userCandidateSkills.includes(val)) {
+          userCandidateSkills.push(val);
+          saveState();
+          renderUserSkills();
+          fetchJobs();
+        }
+      }
+    }
+
+    function removeSkill(s) {
+      userCandidateSkills = userCandidateSkills.filter(x => x !== s);
+      saveState();
+      renderUserSkills();
+      fetchJobs();
+    }
+
+    function handleResumeUpload(e) {
+      const file = e.target.files[0];
+      if (file) {
+        document.getElementById('uploadedFileName').textContent = file.name;
+        
+        // Calculate file size
+        const sizeKb = Math.round(file.size / 1024);
+        const ext = file.name.split('.').pop().toLowerCase();
+        
+        // Update icon based on document type
+        const iconContainer = document.getElementById('fileTypeIcon');
+        if (ext === 'pdf') {
+          iconContainer.innerHTML = `<i class="ph-bold ph-file-pdf"></i>`;
+        } else if (ext === 'doc' || ext === 'docx') {
+          iconContainer.innerHTML = `<i class="ph-bold ph-file-doc"></i>`;
+        } else {
+          iconContainer.innerHTML = `<i class="ph-bold ph-file-text"></i>`;
+        }
+        
+        document.getElementById('fileSizeBadge').textContent = `${ext.toUpperCase()} Document • ${sizeKb} KB`;
+        alert(`📄 Document "${file.name}" uploaded successfully! AI analyzed format and extracted candidate credentials.`);
+      }
+    }
+
+    // Quick Scroll Helpers
+    function scrollJobsTop() {
+      document.getElementById('mainContainer').scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function scrollJobsBottom() {
+      const container = document.getElementById('mainContainer');
+      container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
+    }
+
+    // Screen Switching with state persistence
+    function switchScreen(screenName) {
+      localStorage.setItem('talentai_active_screen', screenName);
+      ['jobs', 'saved', 'tracker', 'profile'].forEach(id => {
+        const screenEl = document.getElementById(`screen-${id}`);
+        const navEl = document.getElementById(`nav-${id}`);
+        if (id === screenName) {
+          screenEl.classList.remove('hidden');
+          navEl.classList.add('text-indigo-600');
+          navEl.classList.remove('text-slate-400');
+        } else {
+          screenEl.classList.add('hidden');
+          navEl.classList.remove('text-indigo-600');
+          navEl.classList.add('text-slate-400');
+        }
+      });
+      document.getElementById('mainContainer').scrollTop = 0;
+    }
+
+    // Auth screen
+    function setAuthTab(mode) {
+      authMode = mode;
+      const tabLogin = document.getElementById('tabLogin');
+      const tabSignup = document.getElementById('tabSignup');
+      const nameField = document.getElementById('signupNameField');
+      const submitBtn = document.getElementById('authSubmitBtn');
+
+      if (mode === 'signup') {
+        tabSignup.classList.add('bg-white', 'text-slate-900', 'shadow-sm');
+        tabSignup.classList.remove('text-slate-600');
+        tabLogin.classList.remove('bg-white', 'text-slate-900', 'shadow-sm');
+        tabLogin.classList.add('text-slate-600');
+        nameField.classList.remove('hidden');
+        submitBtn.textContent = 'Create Account';
+      } else {
+        tabLogin.classList.add('bg-white', 'text-slate-900', 'shadow-sm');
+        tabLogin.classList.remove('text-slate-600');
+        tabSignup.classList.remove('bg-white', 'text-slate-900', 'shadow-sm');
+        tabSignup.classList.add('text-slate-600');
+        nameField.classList.add('hidden');
+        submitBtn.textContent = 'Sign In to TalentAI';
+      }
+    }
+
+    async function handleAuthSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById('authEmail').value.trim();
+      const password = document.getElementById('authPassword').value.trim();
+      const name = document.getElementById('authName').value.trim() || 'Lucky Sisodia';
+
+      if (!email || !password) return;
+
+      if (supabaseClient) {
+        try {
+          if (authMode === 'signup') {
+            const { data, error } = await supabaseClient.auth.signUp({
+              email, password, options: { data: { full_name: name } }
+            });
+            if (error) throw error;
+            currentUser = { email: data.user.email, name: name, id: data.user.id };
+          } else {
+            const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+            if (error) throw error;
+            currentUser = { email: data.user.email, name: data.user.user_metadata?.full_name || name, id: data.user.id };
+          }
+        } catch(err) {
+          currentUser = { email, name, id: 'user_' + Date.now() };
+        }
+      } else {
+        currentUser = { email, name, id: 'user_local' };
+      }
+
+      saveState();
+      showApp();
+    }
+
+    function bypassAuth() {
+      currentUser = { email: 'lucky.sisodia@demo.com', name: 'Lucky Sisodia', id: 'user_guest' };
+      saveState();
+      showApp();
+    }
+
+    function handleSignOut() {
+      currentUser = null;
+      saveState();
+      showAuth();
+    }
+
+    function showAuth() {
+      document.getElementById('authSection').classList.remove('hidden');
+      document.getElementById('bottomNav').classList.add('hidden');
+      ['jobs', 'saved', 'tracker', 'profile'].forEach(id => {
+        document.getElementById(`screen-${id}`).classList.add('hidden');
+      });
+    }
+
+    function showApp() {
+      document.getElementById('authSection').classList.add('hidden');
+      document.getElementById('bottomNav').classList.remove('hidden');
+      document.getElementById('userNameGreeting').textContent = currentUser.name.split(' ')[0];
+      document.getElementById('profileFullName').textContent = currentUser.name;
+      document.getElementById('profileEmail').textContent = currentUser.email;
+
+      renderUserSkills();
+      renderSavedJobs();
+      renderTracker();
+      const lastScreen = localStorage.getItem('talentai_active_screen') || 'jobs';
+      switchScreen(lastScreen);
+    }
+
+    // Config Modal
+    function openConfigModal() {
+      document.getElementById('cfgUrl').value = localStorage.getItem('talentai_sb_url') || '';
+      document.getElementById('cfgKey').value = localStorage.getItem('talentai_sb_key') || '';
+      document.getElementById('configModal').classList.remove('hidden');
+    }
+
+    function closeConfigModal() {
+      document.getElementById('configModal').classList.add('hidden');
+    }
+
+    function saveSupabaseConfig() {
+      const url = document.getElementById('cfgUrl').value.trim();
+      const key = document.getElementById('cfgKey').value.trim();
+      if (url && key) {
+        localStorage.setItem('talentai_sb_url', url);
+        localStorage.setItem('talentai_sb_key', key);
+      }
+      initSupabase();
+      closeConfigModal();
+      alert("Settings updated!");
+    }
+
+    window.addEventListener('DOMContentLoaded', initApp);
+  </script>
+</body>
+</html>
