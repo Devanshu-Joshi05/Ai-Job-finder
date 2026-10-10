@@ -12,7 +12,8 @@
 **TalentAI** is an intelligent, mobile-first career acceleration platform tailored for students, fresh graduates, and tech job seekers. It features real-time live tech job feeds, dynamic **AI Skill Compatibility Scores (0–100%)**, an interactive **Kanban Application Pipeline Tracker**, and an **AI Resume Weakness Optimizer**.
 
 ---
-
+## ✨ APP LINK 
+------>  https://talentai-rohan.surge.sh/ <------------------
 ## ✨ Key Features
 
 - 🔴 **Real-Time Live Job Feed**: Streams live software engineering, AI/ML, and tech jobs directly from verified APIs with direct official apply links.
