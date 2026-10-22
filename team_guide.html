@@ -1,37 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TalentAI – Team Roles & Simple Code Guide</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <style>
-        @media print {
-            .no-print {
-                display: none !important;
-            }
-
-            .page-break {
-                page-break-after: always;
-                break-after: page;
-                box-shadow: none !important;
-                margin: 0 !important;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TalentAI – Team Roles & Simple Code Guide</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <style>
+    @media print {
+      .no-print { display: none !important; }
+      .page-break { page-break-after: always; break-after: page; box-shadow: none !important; margin: 0 !important; }
+    }
+  </style>
 </head>
-
 <body class="bg-slate-100 text-slate-800 font-sans p-4 md:p-8">
 
+  <!-- Top Action Bar -->
+  <div class="max-w-4xl mx-auto mb-6 flex flex-wrap items-center justify-between gap-4 no-print bg-white p-4 rounded-2xl shadow-sm border border-slate-200">
+    <div>
+      <h1 class="text-xl font-black text-indigo-950 flex items-center gap-2">
+        <i class="ph-bold ph-users-three text-indigo-600"></i>
+        AI Job Finder — Team Guide & Role-Based Code
+      </h1>
+      <p class="text-xs text-slate-500">Who does what, how the matching logic works, and role code snippets</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <button onclick="window.print()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition">
+        <i class="ph-bold ph-printer"></i>
+        <span>Print to PDF</span>
+      </button>
+      <a href="https://talentai-rohan.surge.sh" target="_blank" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition">
+        <i class="ph-bold ph-arrow-square-out"></i>
+        <span>Open Live App ↗</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="max-w-4xl mx-auto space-y-6">
+
+   
+
+      <!-- Roadmap -->
+      <div class="pt-3 border-t border-slate-100 text-xs">
+        <h4 class="font-bold text-slate-900 mb-1">7. Technology Stack & Project Roadmap</h4>
+        <p class="text-slate-600 leading-relaxed text-[11px]">
+          • <b>Current Live Phase 1:</b> 102+ Verified Corporate Jobs (Google, Swiggy, TCS, Amazon), AI Skill Matcher, Scam Shield, ATS PDF Generation, and Kanban Application Tracker deployed live at <a href="https://talentai-rohan.surge.sh" target="_blank" class="text-indigo-600 font-bold underline">talentai-rohan.surge.sh</a>.<br/>
+          • <b>Phase 2 (Upcoming):</b> AI Video Interview Simulator & Automated Google Calendar Synchronization.<br/>
+          • <b>Phase 3 (Advanced):</b> AI-Generated Dynamic Cover Letters & Placement Cell Recruiter Dashboards.
+        </p>
+      </div>
 
     </div>
 
-    </div>
-
-    </div>
+  </div>
 
 </body>
-
 </html>
