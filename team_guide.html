@@ -206,46 +206,6 @@ app.post(<span class="text-amber-200">'/api/jobs/match'</span>, <span class="tex
 
     </div>
 
-    <!-- PAGE 3: MANU AGARWAL, VIVA CHEAT SHEET & ROADMAP -->
-    <div class="page-break bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-slate-200 space-y-6">
-      
-      <!-- Manu Agarwal Section -->
-      <div>
-        <div class="flex items-center justify-between mb-2">
-          <h3 class="text-base font-black text-rose-950">5. Role 4: Manu Agarwal — Researcher</h3>
-          <span class="text-[11px] bg-rose-50 text-rose-700 font-bold px-2.5 py-0.5 rounded-full">Research & Metrics</span>
-        </div>
-        <p class="text-xs text-slate-600 mb-3">
-          <b>Focus:</b> Researched IEEE and Harvard Business Review papers on automated ATS resume filtering, and established evaluation benchmarks (Precision, Recall, Scam Detection Accuracy) to validate our platform.
-        </p>
-        <div class="bg-slate-900 text-sky-300 p-4 rounded-2xl font-mono text-xs overflow-x-auto shadow-inner">
-          <p class="text-slate-400 text-[11px] mb-2 font-sans font-bold">// Manu's Role Code: Precision & Recall Validation Script for Scam Classifier</p>
-<pre class="text-slate-100"><code><span class="text-emerald-400">def</span> <span class="text-sky-300">evaluate_scam_classifier</span>(test_job_dataset):
-    true_positives = <span class="text-amber-300">0</span>
-    false_positives = <span class="text-amber-300">0</span>
-    actual_scams = sum(<span class="text-amber-300">1</span> <span class="text-emerald-400">for</span> job <span class="text-emerald-400">in</span> test_job_dataset <span class="text-emerald-400">if</span> job[<span class="text-amber-200">'is_scam'</span>])
-    
-    <span class="text-emerald-400">for</span> job <span class="text-emerald-400">in</span> test_job_dataset:
-        is_flagged, _ = check_is_scam(job[<span class="text-amber-200">'description'</span>])
-        <span class="text-emerald-400">if</span> is_flagged <span class="text-emerald-400">and</span> job[<span class="text-amber-200">'is_scam'</span>]:
-            true_positives += <span class="text-amber-300">1</span>
-        <span class="text-emerald-400">elif</span> is_flagged <span class="text-emerald-400">and not</span> job[<span class="text-amber-200">'is_scam'</span>]:
-            false_positives += <span class="text-amber-300">1</span>
-            
-    precision = true_positives / max(<span class="text-amber-300">1</span>, (true_positives + false_positives))
-    recall = true_positives / max(<span class="text-amber-300">1</span>, actual_scams)
-    
-    <span class="text-emerald-400">return</span> {
-        <span class="text-amber-200">"precision"</span>: <span class="text-amber-200">f"{round(precision * 100, 1)}%"</span>,
-        <span class="text-amber-200">"recall"</span>: <span class="text-amber-200">f"{round(recall * 100, 1)}%"</span>,
-        <span class="text-amber-200">"student_benefit"</span>: <span class="text-amber-200">"Zero fraudulent applications submitted"</span>
-    }</code></pre>
-        </div>
-        <p class="text-[11px] text-rose-900 bg-rose-50/70 p-2.5 rounded-xl border border-rose-100 mt-2 italic">
-          <b>Viva Tip for Manu:</b> "I surveyed academic papers on ATS keyword screening and developed benchmark evaluation scripts to mathematically verify our scam detector's accuracy."
-        </p>
-      </div>
-
       <!-- Viva Cheat Sheet Table -->
       <div class="pt-4 border-t border-slate-100">
         <h3 class="text-base font-black text-slate-900 mb-3">6. Teacher Viva Cheat-Sheet: 30-Second Speaking Script</h3>
