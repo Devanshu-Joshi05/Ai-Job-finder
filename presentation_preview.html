@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TalentAI – Teacher Presentation & Quick Viva Guide</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <style>
+    @media print {
+      .no-print { display: none !important; }
+      .slide-page { page-break-after: always; break-after: page; box-shadow: none !important; margin: 0 !important; }
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans p-4 md:p-8">
+
+  <!-- Top Action Bar -->
+  <div class="max-w-5xl mx-auto mb-6 flex flex-wrap items-center justify-between gap-4 no-print bg-white p-4 rounded-2xl shadow-sm border border-slate-200">
+    <div>
+      <h1 class="text-xl font-black text-indigo-950 flex items-center gap-2">
+        <i class="ph-bold ph-presentation text-indigo-600"></i>
+        TalentAI – Viva & Presentation Dashboard
+      </h1>
+      <p class="text-xs text-slate-500">Presentation slides & 2-Minute teacher summary script</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <button onclick="window.print()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition">
+        <i class="ph-bold ph-printer"></i>
+        <span>Print as PDF</span>
+      </button>
+      <a href="https://talentai-rohan.surge.sh" target="_blank" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition">
+        <i class="ph-bold ph-arrow-square-out"></i>
+        <span>Open Live App ↗</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="max-w-5xl mx-auto space-y-8">
+
+    <!-- 2-MINUTE TEACHER SPEECH CHEAT SHEET -->
+    <div class="bg-gradient-to-br from-indigo-900 to-slate-900 text-white p-6 rounded-3xl shadow-xl border border-indigo-700/50">
+      <div class="flex items-center gap-2 text-emerald-400 font-bold text-xs uppercase tracking-wider mb-2">
+        <i class="ph-bold ph-microphone-stage text-sm"></i>
+        <span>Teacher ke Samne 2 Minute me Bolne ka Exact Script (Hinglish + English)</span>
+      </div>
+      <h2 class="text-2xl font-black text-white mb-3">TalentAI: Summary for Academic Evaluation</h2>
+      <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4 text-xs md:text-sm leading-relaxed text-indigo-100 space-y-3 border border-white/10">
+        <p>
+          <span class="font-bold text-white">"Good morning/afternoon, Respected Teacher!</span><br>
+          Today I am presenting our project <b>TalentAI – Smart AI Job Finder & Career Growth Platform</b>.
+        </p>
+        <p>
+          <b>The Problem:</b> Freshers and college students face two huge hurdles when searching for jobs:
+          <span class="text-rose-300 font-semibold">(1) Fake job scams</span> charging registration or laptop fees, and
+          <span class="text-amber-300 font-semibold">(2) 75%+ ATS resume rejections</span> due to missing keywords.
+        </p>
+        <p>
+          <b>Our Solution has 4 Core Innovations:</b><br>
+          • <b>102+ Verified Corporate Jobs:</b> Direct feeds from Google, Swiggy, Zomato, TCS, and Amazon with 1-click external apply links.<br>
+          • <b>AI Scam Detector:</b> Automated heuristics that detect registration fees and Telegram redirects, warning students with a red risk badge.<br>
+          • <b>ATS Resume Optimizer:</b> Compares student skills against job prerequisites, computes a real-time Match %, and generates a clean, downloadable ATS PDF.<br>
+          • <b>Kanban Tracker:</b> Tracks stages (Applied, Review, Interview, Offer) with confetti celebrations and milestone alerts.
+        </p>
+        <p>
+          <b>Technology & Deployment:</b> Built using Tailwind CSS, vanilla modern JavaScript, Capacitor for Android APK packaging, and deployed live at <a href="https://talentai-rohan.surge.sh" target="_blank" class="text-emerald-300 underline font-bold">talentai-rohan.surge.sh</a>."
+        </p>
+      </div>
+    </div>
+
+    <!-- SLIDE 1 -->
+    <div class="slide-page bg-white p-8 rounded-3xl shadow-sm border border-slate-200">
+      <div class="flex items-center justify-between text-xs font-bold text-indigo-600 mb-4">
+        <span>SLIDE 01 / 08</span>
+        <span class="bg-indigo-50 px-3 py-1 rounded-full">PROJECT TITLE & INTRODUCTION</span>
+      </div>
+      <div class="border-l-4 border-indigo-600 pl-4 mb-6">
+        <h3 class="text-3xl font-black text-slate-900 leading-tight">TalentAI: AI-Powered Job Finder & Career Growth Platform</h3>
+        <p class="text-sm text-slate-500 mt-1">Cross-platform intelligent career ecosystem for college students & fresh graduates</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+          <p class="font-bold text-slate-700">Project Type</p>
+          <p class="text-slate-500 mt-1">Final Year / Academic Major Project (Web & Mobile)</p>
+        </div>
+        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+          <p class="font-bold text-slate-700">Core Technologies</p>
+          <p class="text-slate-500 mt-1">HTML5, Tailwind, JS, Capacitor, Supabase, ReportLab</p>
+        </div>
+        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+          <p class="font-bold text-slate-700">Live Status</p>
+          <p class="text-emerald-600 font-bold mt-1">✔ 100% Deployed & Production Ready</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 2 -->
+    <div class="slide-page bg-white p-8 rounded-3xl shadow-sm border border-slate-200">
+      <div class="flex items-center justify-between text-xs font-bold text-indigo-600 mb-4">
+        <span>SLIDE 02 / 08</span>
+        <span class="bg-rose-50 text-rose-700 px-3 py-1 rounded-full">PROBLEM STATEMENT</span>
+      </div>
+      <h3 class="text-2xl font-black text-slate-900 mb-6">Real-World Pain Points Faced by Students</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-rose-50/50 p-5 rounded-2xl border border-rose-200">
+          <div class="w-10 h-10 rounded-xl bg-rose-100 flex items-center justify-center text-rose-700 font-black mb-3">01</div>
+          <h4 class="font-bold text-rose-950 text-sm mb-1.5">Fake Job Frauds</h4>
+          <p class="text-xs text-rose-800 leading-relaxed">Students lose money to fraudulent listings demanding "registration/training fees" or redirecting to anonymous Telegram groups.</p>
+        </div>
+        <div class="bg-amber-50/50 p-5 rounded-2xl border border-amber-200">
+          <div class="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center text-amber-700 font-black mb-3">02</div>
+          <h4 class="font-bold text-amber-950 text-sm mb-1.5">ATS Auto-Rejections</h4>
+          <p class="text-xs text-amber-800 leading-relaxed">Over 75% of student resumes are rejected before human review because of missing keywords and non-ATS compliant formatting.</p>
+        </div>
+        <div class="bg-indigo-50/50 p-5 rounded-2xl border border-indigo-200">
+          <div class="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center text-indigo-700 font-black mb-3">03</div>
+          <h4 class="font-bold text-indigo-950 text-sm mb-1.5">Application Chaos</h4>
+          <p class="text-xs text-indigo-800 leading-relaxed">Applying across LinkedIn, Naukri, and company portals causes missed interview deadlines and zero follow-up tracking.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3 -->
+    <div class="slide-page bg-white p-8 rounded-3xl shadow-sm border border-slate-200">
+      <div class="flex items-center justify-between text-xs font-bold text-indigo-600 mb-4">
+        <span>SLIDE 03 / 08</span>
+        <span class="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full">PROPOSED SOLUTION</span>
+      </div>
+      <h3 class="text-2xl font-black text-slate-900 mb-6">TalentAI: 4 Intelligent Pillars</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50 flex items-start gap-3">
+          <i class="ph-fill ph-seal-check text-2xl text-emerald-600 shrink-0"></i>
+          <div>
+            <h4 class="font-bold text-sm text-slate-900">102+ Verified Corporate Openings</h4>
+            <p class="text-xs text-slate-600 mt-1">Aggregated verified jobs from Google, Swiggy, Zomato, TCS, and Amazon with 1-click external apply links.</p>
+          </div>
+        </div>
+        <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50 flex items-start gap-3">
+          <i class="ph-fill ph-shield-warning text-2xl text-rose-600 shrink-0"></i>
+          <div>
+            <h4 class="font-bold text-sm text-slate-900">Automated Scam Detection</h4>
+            <p class="text-xs text-slate-600 mt-1">Evaluates posts for fees, unverified emails, and Telegram links; alerts users with prominent warning badges.</p>
+          </div>
+        </div>
+        <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50 flex items-start gap-3">
+          <i class="ph-fill ph-file-pdf text-2xl text-indigo-600 shrink-0"></i>
+          <div>
+            <h4 class="font-bold text-sm text-slate-900">ATS Resume Optimizer & PDF Export</h4>
+            <p class="text-xs text-slate-600 mt-1">Calculates skill match %, suggests keyword fixes, and generates ATS-ready single-column PDF resumes.</p>
+          </div>
+        </div>
+        <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50 flex items-start gap-3">
+          <i class="ph-fill ph-kanban text-2xl text-indigo-600 shrink-0"></i>
+          <div>
+            <h4 class="font-bold text-sm text-slate-900">Integrated Kanban Tracker</h4>
+            <p class="text-xs text-slate-600 mt-1">Tracks candidate applications across Applied, Review, Interview, and Offer with celebration milestones.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4 & 5 SUMMARY -->
+    <div class="slide-page bg-white p-8 rounded-3xl shadow-sm border border-slate-200">
+      <div class="flex items-center justify-between text-xs font-bold text-indigo-600 mb-4">
+        <span>SLIDE 04 & 05</span>
+        <span class="bg-indigo-50 px-3 py-1 rounded-full">SYSTEM ARCHITECTURE & ALGORITHMS</span>
+      </div>
+      <h3 class="text-2xl font-black text-slate-900 mb-4">Architecture & Technical Innovation</h3>
+      <div class="space-y-3 text-xs">
+        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+          <p class="font-bold text-indigo-900">1. Scam Classifier Rule Engine:</p>
+          <p class="text-slate-600 mt-0.5">Scans token vocabulary for phrases like <i>"security deposit", "registration fee", "pay before test"</i> and inspects contact URLs for unofficial domains.</p>
+        </div>
+        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+          <p class="font-bold text-indigo-900">2. Skill Match & Jaccard Scoring:</p>
+          <p class="text-slate-600 mt-0.5">Calculates similarity index between applicant skills (React, Node, SQL) and job prerequisites, outputting an instant 0–100% score.</p>
+        </div>
+        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+          <p class="font-bold text-indigo-900">3. Multi-User Storage Isolation:</p>
+          <p class="text-slate-600 mt-0.5">Employs partitioned local storage keys (<code>talentai_saved_&lt;email&gt;</code>) so different accounts on the same device never leak saved jobs or tracker stages.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 6 & 7: LIVE DEMO & RESULTS -->
+    <div class="slide-page bg-white p-8 rounded-3xl shadow-sm border border-slate-200">
+      <div class="flex items-center justify-between text-xs font-bold text-indigo-600 mb-4">
+        <span>SLIDE 06 & 07</span>
+        <span class="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full">RESULTS & DEPLOYMENT</span>
+      </div>
+      <h3 class="text-2xl font-black text-slate-900 mb-4">Live Demonstration & Academic Deliverables</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="p-4 bg-emerald-50/50 rounded-2xl border border-emerald-200">
+          <h4 class="font-bold text-emerald-900 text-sm">Live Production Web PWA</h4>
+          <p class="text-xs text-emerald-800 mt-1">Accessible on mobile & PC browsers with zero installation lag.</p>
+          <a href="https://talentai-rohan.surge.sh" target="_blank" class="inline-block mt-3 px-3 py-1.5 bg-emerald-600 text-white font-bold text-xs rounded-lg hover:bg-emerald-700 transition">
+            Visit talentai-rohan.surge.sh ↗
+          </a>
+        </div>
+        <div class="p-4 bg-indigo-50/50 rounded-2xl border border-indigo-200">
+          <h4 class="font-bold text-indigo-900 text-sm">Native Android Package (Capacitor 8)</h4>
+          <p class="text-xs text-indigo-800 mt-1">Configured with high-resolution Career Growth icon, splash screen, and offline PWA service worker.</p>
+          <span class="inline-block mt-3 px-3 py-1.5 bg-indigo-600 text-white font-bold text-xs rounded-lg">
+            APK Ready (Capacitor Android)
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 8: CONCLUSION & FUTURE SCOPE -->
+    <div class="slide-page bg-slate-900 text-white p-8 rounded-3xl shadow-sm border border-slate-800">
+      <div class="flex items-center justify-between text-xs font-bold text-emerald-400 mb-4">
+        <span>SLIDE 08 / 08</span>
+        <span class="bg-white/10 px-3 py-1 rounded-full">CONCLUSION</span>
+      </div>
+      <h3 class="text-2xl font-black text-white mb-4">Conclusion & Future Enhancements</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+        <div class="space-y-2 text-slate-300">
+          <p class="font-bold text-white text-sm">Key Project Takeaways:</p>
+          <p>✔ Complete end-to-end platform bridging students directly to legitimate corporate careers.</p>
+          <p>✔ Successfully safeguards freshers from fake fees and non-verified recruiter traps.</p>
+          <p>✔ Provides free ATS resume generation without requiring costly paid subscriptions.</p>
+        </div>
+        <div class="space-y-2 text-slate-300">
+          <p class="font-bold text-white text-sm">Future Roadmap:</p>
+          <p>• AI Mock Interview simulator with real-time speech and behavioral feedback.</p>
+          <p>• Google Calendar webhook synchronization for interview round reminders.</p>
+          <p>• Direct Supabase recruiter chat dashboard for campus placement cells.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="text-center text-xs text-slate-400 mt-8 mb-4 no-print">
+    Generated for TalentAI Project Presentation & Academic Evaluation.
+  </div>
+
+</body>
+</html>
