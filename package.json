@@ -1,0 +1,29 @@
+{
+  "name": "talentai-mobile",
+  "version": "1.0.0",
+  "description": "TalentAI - AI Job Finder & Career Accelerator (PWA & Capacitor Hybrid Native App)",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "cap:add": "npx cap add android",
+    "cap:sync": "npx cap sync",
+    "cap:open": "npx cap open android",
+    "cap:run": "npx cap run android"
+  },
+  "dependencies": {
+    "@capacitor/android": "^6.2.2",
+    "@capacitor/core": "^6.2.2"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.2.2"
+  },
+  "keywords": [
+    "talentai",
+    "job-finder",
+    "pwa",
+    "capacitor",
+    "android"
+  ],
+  "author": "Lucky Sisodia",
+  "license": "ISC"
+}

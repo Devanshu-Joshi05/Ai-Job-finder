@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="560" viewBox="0 0 900 560" role="img" aria-label="Reference layout for the AI Job Finder home page">
+  <rect width="900" height="560" fill="#f4f7ff"/>
+  <rect x="170" y="25" width="560" height="510" rx="28" fill="#ffffff" stroke="#d8e1f3" stroke-width="3"/>
+  <rect x="170" y="25" width="560" height="55" rx="28" fill="#5b4bdb"/>
+  <rect x="170" y="54" width="560" height="26" fill="#5b4bdb"/>
+  <circle cx="204" cy="52" r="7" fill="#ffffff" opacity=".9"/>
+  <text x="225" y="59" font-family="Arial, sans-serif" font-size="18" fill="#ffffff" font-weight="700">AI Job Finder</text>
+  <circle cx="450" cy="172" r="54" fill="#e8e4ff"/>
+  <path d="M424 178l17 17 36-40" fill="none" stroke="#5b4bdb" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="450" y="270" text-anchor="middle" font-family="Arial, sans-serif" font-size="31" fill="#17233b" font-weight="700">Find Your Dream Job</text>
+  <text x="450" y="309" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#63718b">AI-powered job recommendations</text>
+  <text x="450" y="336" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#63718b">made just for you</text>
+  <rect x="310" y="395" width="280" height="58" rx="12" fill="#5b4bdb"/>
+  <text x="450" y="432" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" fill="#ffffff" font-weight="700">Get Started</text>
+  <text x="450" y="493" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#8793a9">Your job search starts here</text>
+  <path d="M80 270H147" stroke="#5b4bdb" stroke-width="3"/>
+  <path d="M147 270l-12-8m12 8l-12 8" stroke="#5b4bdb" stroke-width="3" fill="none"/>
+  <text x="25" y="245" font-family="Arial, sans-serif" font-size="18" fill="#17233b" font-weight="700">FlutterFlow</text>
+  <text x="25" y="273" font-family="Arial, sans-serif" font-size="16" fill="#63718b">HomePage</text>
+  <text x="25" y="299" font-family="Arial, sans-serif" font-size="16" fill="#63718b">Column + Text + Button</text>
+</svg>
