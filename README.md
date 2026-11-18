@@ -1,4 +1,3 @@
-FINAL :-
 # 🚀 TalentAI – AI-Powered Job Finder & Career Tracker
 
 ![TalentAI Banner](https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=1200&auto=format&fit=crop&q=80)
@@ -73,4 +72,7 @@ FINAL :-
 
 ## 👤 Author
 - **Lucky Sisodia**
+- **manu agarwal**
+- **ayushman**
+- **devanshu joshi**
 - Project: Academic & Industry MVP Submission
